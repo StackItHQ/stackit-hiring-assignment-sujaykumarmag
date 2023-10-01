@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base target="_top">
+</head>
+
+<body>
+  <form id="upload-form">
+    <input type="file" id="csv-file" accept=".csv" />
+    <input type="button" value="Upload" onclick="readFile()" />
+  </form>
+
+  <form id="columnForm" style="display: none;">
+    <div id="checkboxes"></div>
+    <button type="button" onclick="getSelectedColumns()">Submit</button>
+    <button type="button" onclick="navigateToVisualize()">Visualize</button>
+  </form>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.0.3/pako.min.js"></script>
+  <script>
+    function navigateToVisualize() {
+    // Redirect to the 'visualize.html' page when the button is clicked
+    window.location.href = 'box_plot.html';
+  }
+    var columnHeaders = [];
+    var csvData;
+
+    var columnHeaders = [];
+    var csvData;
+
+    function readFile() {
+      var fileInput = document.getElementById("csv-file");
+      var file = fileInput.files[0];
+      var reader = new FileReader();
+
+      reader.onload = function (e) {
+        csvData = e.target.result; // Save the file content to the global variable
+        var lines = csvData.split("\n");
+        if (lines.length > 0) {
+          columnHeaders = lines[0].split(",");
+          displayColumns(columnHeaders); // Move this line inside the callback
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    async function processData(selectedColumns) {
+      var csvArray = csvData.split("\n").map(function (line) {
+        return line.split(",");
+      });
+      var selectedData = csvArray.map(function (row) {
+        var newRow = [];
+        selectedColumns.forEach(function (column) {
+          var columnIndex = columnHeaders.indexOf(column);
+          newRow.push(row[columnIndex]);
+        });
+        return newRow.join(",");
+      });
+
+      var finalCSV = [columnHeaders.join(",")].concat(selectedData).join("\n")
+      const formData = new FormData();
+      formData.append('file', new Blob([finalCSV], { type: 'text/csv' }));
+
+      try {
+          const response = await fetch('http://18.212.182.67/upload/', {
+          method: 'POST',
+          body: formData,
+        });
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        console.log(data);
+      } catch (error) {
+        console.error('Error:', error);
+        alert('File upload failed.');
+      }
+    }
+    
+
+
+
+    function displayColumns(columns) {
+      const checkboxes = document.getElementById('checkboxes');
+      checkboxes.innerHTML = ''; // Clear previous checkboxes
+      // Show the checkboxes
+      const formSubmit = document.getElementById('columnForm');
+      formSubmit.style.display = 'block';
+
+      columns.forEach(column => {
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.name = 'selectedColumns';
+        checkbox.value = column;
+        const label = document.createElement('label');
+        label.appendChild(document.createTextNode(column));
+
+        checkboxes.appendChild(checkbox);
+        checkboxes.appendChild(label);
+        checkboxes.appendChild(document.createElement('br'));
+      });
+
+
+    }
+
+    function getSelectedColumns() {
+      const form = document.getElementById('columnForm');
+      const selectedColumns = [];
+      const checkboxes = form.elements.selectedColumns;
+
+      for (let i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i].checked) {
+          selectedColumns.push(checkboxes[i].value);
+        }
+      }
+
+      if (selectedColumns.length > 0) {
+        selected = selectedColumns.join(', ').split(', ');
+        //alert(`Selected Columns: ${selected}`);
+        processData(selected)
+        // You can perform further actions with the selected columns here
+      } else {
+        alert('Please select at least one column.');
+      }
+    }
+  </script>
+</body>
+
+</html>

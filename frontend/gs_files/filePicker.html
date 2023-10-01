@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base target="_top">
+</head>
+
+<body>
+  <input type="file" id="fileInput" accept=".csv">
+  <button onclick="uploadFile()">Upload</button>
+
+  <form id="columnForm" style="display: none;">
+    <div id="checkboxes"></div>
+    <button type="button" onclick="getSelectedColumns()">Submit</button>
+  </form>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.0.3/pako.min.js"></script>
+  <script>
+    async function uploadFile() {
+      var fileInput = document.getElementById('fileInput');
+      var file = fileInput.files[0];
+      if (!file) {
+        alert('Please select a CSV file.');
+        return;
+      }
+
+      var formData = new FormData();
+      
+      // Read the file content as an ArrayBuffer
+      const arrayBuffer = await file.arrayBuffer();
+      
+      // Compress the file data using pako
+      const compressedData = pako.deflate(arrayBuffer, { to: 'string' });
+
+      // Create a Blob with the compressed data
+      const compressedBlob = new Blob([compressedData]);
+
+      // Append the compressed Blob to the FormData
+      formData.append('file', compressedBlob);
+      console.log(compressedBlob);
+
+      try {
+          const response = await fetch('http://18.212.53.56/upload/', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        if (data.columns && Array.isArray(data.columns)) {
+          // Handle the response from the server
+          console.log(data);
+          displayColumns(data.columns);
+          alert('File uploaded and compressed successfully!');
+        } else {
+          throw Error('Invalid server response');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('File upload failed.');
+      }
+    }
+    function displayColumns(columns) {
+      const checkboxes = document.getElementById('checkboxes');
+      checkboxes.innerHTML = ''; // Clear previous checkboxes
+      // Show the checkboxes
+      const formSubmit = document.getElementById('columnForm');
+      formSubmit.style.display = 'block';
+
+      columns.forEach(column => {
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.name = 'selectedColumns';
+        checkbox.value = column;
+        const label = document.createElement('label');
+        label.appendChild(document.createTextNode(column));
+
+        checkboxes.appendChild(checkbox);
+        checkboxes.appendChild(label);
+        checkboxes.appendChild(document.createElement('br'));
+      });
+
+      
+    }
+
+    function getSelectedColumns() {
+      const form = document.getElementById('columnForm');
+      const selectedColumns = [];
+      const checkboxes = form.elements.selectedColumns;
+
+      for (let i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i].checked) {
+          selectedColumns.push(checkboxes[i].value);
+        }
+      }
+
+      if (selectedColumns.length > 0) {
+        selected = selectedColumns.join(', ');
+        alert(`Selected Columns: ${selected}`);
+        // You can perform further actions with the selected columns here
+      } else {
+        alert('Please select at least one column.');
+      }
+    }
+  </script>
+</body>
+
+</html>
