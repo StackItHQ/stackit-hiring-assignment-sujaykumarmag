@@ -104,35 +104,36 @@ Feel free to check the discussions tab, you might get something of help there. C
 
 ```
 
-Repository Name
+
+stackit-hiring-assignment-sujaykumarmag
 │
 ├── README.md
 ├── LICENSE
-├── assets/images               (Optional: For Plots and Images)
+├── assets/images                  (Optional: For Plots and Images)
 │   ├── pair_plot.png
 │  
 │
 ├── frontend/                
 │   ├── gs_files/
-│   │   ├── code.gs        (Source Code - Solution 1 (full))
+│   │   ├── code.gs                (Source Code - Solution 1 (full))
 │   │   ├── filePicker.html
 │   │   └── uploadCSV.html
 │   │
-│   ├── index.html     (Source Code - Solution 2 (frontend)
+│   ├── index.html                 (Source Code - Solution 2 (frontend)
 |   ├── box_plot.html 
 │  
 │
-├── input_testcases/              (Optional: Test files)
+├── input_testcases/               (Optional: Test files)
 │   ├── mnist_test.csv
 │   ├── titanic.csv
 │   └── ...
 │
-├── main.py (Source Code - Solution 1 (backend App)           
-│   ├── data.json
-│   ├── data.csv
-│   └── ...
+├── main.py                        (Source Code - Solution 1 (backend App)
+|
+|     
+|── requirements.txt               (For Installation of Python Packages)
 │
-├── .gitignore          (Gitignore file)
+├── .gitignore                     (Gitignore file)
 
 ```
 
