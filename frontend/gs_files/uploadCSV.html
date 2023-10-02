@@ -5,7 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CSV Upload</title>
-  <!-- Include Bootstrap CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 
@@ -30,7 +29,6 @@
     </form>
   </div>
 
-  <!-- Include Bootstrap JS and jQuery -->
 
 
   <script>
@@ -39,6 +37,10 @@
 
     var columnHeaders = [];
     var csvData;
+
+    /**
+    * readFile() reads a CSV file, extracts column headers, and displays them.
+    */
 
     function readFile() {
       var fileInput = document.getElementById("csv-file");
@@ -56,6 +58,12 @@
       reader.readAsText(file);
     }
 
+
+    /**
+     * processData(selectedColumns) processes selected columns from the CSV data, 
+     * creates a new CSV, and uploads it to a Google Script.
+    */
+
     function processData(selectedColumns) {
       var csvArray = csvData.split("\n").map(function (line) {
         return line.split(",");
@@ -69,19 +77,16 @@
         return newRow.join(",");
       });
       console.log(selectedData);
-      // // Now you can do something with the selectedData, such as display or upload it
-      // // For example, if you want to display it in a textarea element with the id "output":
-      // document.getElementById("output").value = [columnHeaders.join(",")].concat(selectedData).join("\n");
-
-
-
       var finalCSV = [columnHeaders.join(",")].concat(selectedData).join("\n");
-
       google.script.run.uploadCSVFile(finalCSV);
       google.script.host.close();
     }
 
-
+    /**
+    * displayColumns(columns) 
+    * dynamically generates checkboxes
+    * for each column and displays them on the webpage.
+    */
 
     function displayColumns(columns) {
       const checkboxes = document.getElementById('checkboxes');
@@ -102,21 +107,23 @@
         checkboxes.appendChild(label);
         checkboxes.appendChild(document.createElement('br'));
       });
-
-
     }
 
+
+    /**
+     * getSelectedColumns() retrieves selected checkbox values, processes them
+     * calls the processData() function to perform actions with the selected columns.
+     */
+    
     function getSelectedColumns() {
       const form = document.getElementById('columnForm');
       const selectedColumns = [];
       const checkboxes = form.elements.selectedColumns;
-
       for (let i = 0; i < checkboxes.length; i++) {
         if (checkboxes[i].checked) {
           selectedColumns.push(checkboxes[i].value);
         }
       }
-
       if (selectedColumns.length > 0) {
         selected = selectedColumns.join(', ').split(', ');
         //alert(`Selected Columns: ${selected}`);
@@ -126,6 +133,7 @@
         alert('Please select at least one column.');
       }
     }
+
   </script>
 
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

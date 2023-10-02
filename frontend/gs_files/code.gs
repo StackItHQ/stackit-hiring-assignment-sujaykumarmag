@@ -1,3 +1,4 @@
+
 function createCSVMenu() {
   var ui = SpreadsheetApp.getUi();
   ui.createMenu('CSV Functionality1')
@@ -28,18 +29,14 @@ function basicFunction(){
   SpreadsheetApp.getUi().showModalDialog(html, 'Upload CSV File');
 
 }
+
+
 function uploadCSVFile(contents) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
-  
-  // Create a new sheet
   var newSheet = ss.insertSheet('NewSheet');
-  
-  // Split the CSV data into rows and parse each row
   var rows = contents.split("\n").map(function(row) {
     return Utilities.parseCsv(row);
   });
-  
-  // Set all the parsed rows in the new sheet, starting from the top
   newSheet.getRange(1, 1, rows.length, rows[0].length).setValues(rows);
 }
 

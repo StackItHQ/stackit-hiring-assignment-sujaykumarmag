@@ -16,6 +16,14 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.0.3/pako.min.js"></script>
   <script>
+
+    /*** uploadFile() 
+     * sends a compressed CSV file to the server 
+     * handles the server's response
+     * displaying success or error alerts.
+     * Type : Async Function
+     * ***/
+
     async function uploadFile() {
       var fileInput = document.getElementById('fileInput');
       var file = fileInput.files[0];
@@ -23,24 +31,15 @@
         alert('Please select a CSV file.');
         return;
       }
-
       var formData = new FormData();
-      
-      // Read the file content as an ArrayBuffer
       const arrayBuffer = await file.arrayBuffer();
-      
-      // Compress the file data using pako
       const compressedData = pako.deflate(arrayBuffer, { to: 'string' });
-
-      // Create a Blob with the compressed data
       const compressedBlob = new Blob([compressedData]);
-
-      // Append the compressed Blob to the FormData
       formData.append('file', compressedBlob);
       console.log(compressedBlob);
 
       try {
-          const response = await fetch('http://18.212.53.56/upload/', {
+        const response = await fetch('http://18.212.53.56/upload/', {
           method: 'POST',
           body: formData,
         });
@@ -51,7 +50,6 @@
 
         const data = await response.json();
         if (data.columns && Array.isArray(data.columns)) {
-          // Handle the response from the server
           console.log(data);
           displayColumns(data.columns);
           alert('File uploaded and compressed successfully!');
@@ -63,6 +61,15 @@
         alert('File upload failed.');
       }
     }
+
+
+
+    /**
+    * displayColumns(columns) 
+    * dynamically generates checkboxes
+    * for each column and displays them on the webpage.
+    */
+
     function displayColumns(columns) {
       const checkboxes = document.getElementById('checkboxes');
       checkboxes.innerHTML = ''; // Clear previous checkboxes
@@ -82,10 +89,12 @@
         checkboxes.appendChild(label);
         checkboxes.appendChild(document.createElement('br'));
       });
-
-      
     }
-
+    
+    /**
+    * getSelectedColumns() retrieves and alerts the selected checkbox values.
+    * It also handles the case where no columns are selected.
+    */
     function getSelectedColumns() {
       const form = document.getElementById('columnForm');
       const selectedColumns = [];
@@ -100,7 +109,6 @@
       if (selectedColumns.length > 0) {
         selected = selectedColumns.join(', ');
         alert(`Selected Columns: ${selected}`);
-        // You can perform further actions with the selected columns here
       } else {
         alert('Please select at least one column.');
       }
