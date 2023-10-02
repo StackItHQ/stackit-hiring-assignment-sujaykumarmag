@@ -1,6 +1,9 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/_IojtdoU)
 # StackIt Hiring Assignment
 
+
+
+
 ### Welcome to StackIt's hiring assignment! 🚀
 
 **If you didn't get here through github classroom, are you sure you're supposed to be here? 🤨**
@@ -11,6 +14,32 @@ We are glad to have you here, but before you read what you're going to beat your
 - You're free to use any stack, and library of your choice. Use whatever you can get your hands on, on the internet!
 - We love out of the box solutions. We prefer to call it *Jugaad* 
 - This might be just the first round, but carries the most importance of all. Give your best, and we hope you have a fun time solving this problem.
+
+  
+
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Problem Statement: Crafting a CSV Importer for Google Sheets](#problem-statement-crafting-a-csv-importer-for-google-sheets)
+  - [Context](#context)
+  - [Problem Statement](#problem-statement)
+  - [Other Pointers](#other-pointers)
+- [Submission](#submission)
+  - [Timeline](#timeline)
+  - [Submission Guidelines](#submission-guidelines)
+  - [Checklist](#checklist)
+- [Got Questions](#got-questions)
+- [Developer's Section](#developers-section)
+- [File Structure](#file-structure)
+- [Solution One -- Approach](#solution-one-approach)
+  - [Highlights](#highlights)
+  - [Video](#video)
+- [Solution Two -- Approach](#solution-two-approach)
+  - [Highlights](#highlights)
+  - [Alternative Solutions Opted (Jugaad)](#alternative-solutions-opted-jugaad)
+  - [Video](#video)
+- [Installation Procedure](#installation-procedure)
+
 
 ## ✨ **Problem Statement: Crafting a CSV Importer for Google Sheets** ✨
 
@@ -155,6 +184,24 @@ ALternative Solutions Opted (Jugaad)
 
 Video
 [![Watch the video](https://i.stack.imgur.com/Vp2cE.png)](https://drive.google.com/drive/u/1/folders/1NW97Ge4ocpaR44yNko0oJgxJu6wSLPdd)
+
+
+
+## Installation Procedure
+
+    git clone https://github.com/StackItHQ/stackit-hiring-assignment-sujaykumarmag.git
+    cd stackit-hiring-assignment-sujaykumarmag
+    
+### Configuring Server (Virtual Env and Package Installation)
+    
+    python3 -m venv venv
+    source venv/bin/activate
+    pip3 install --upgrade -r requirements.txt
+    
+    
+### Starting Server
+
+    python3 -m uvicorn main:app --reload
 
                                                                                                                     
                                                                                                                     
